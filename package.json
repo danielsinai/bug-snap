@@ -1,0 +1,86 @@
+{
+  "name": "bug-snap",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "main/index.js",
+  "type": "commonjs",
+  "icon": "logo.png",
+  "author": {
+    "name": "Maximilian Stümpfl"
+  },
+  "keywords": [
+    "vite",
+    "react",
+    "electron",
+    "typescript"
+  ],
+  "repository": {
+    "url": "https://github.com/danielsinai/bug-snap"
+  },
+  "productName": "bug-snap",
+  "scripts": {
+    "dev": "concurrently \"yarn dev:vite\" \" yarn dev:electron\"",
+    "dev:vite": "vite",
+    "dev:electron": "npm run build:electron && electron .",
+    "build": "npm run build:vite && npm run build:electron",
+    "build:vite": "vite build",
+    "build:electron": "tsc -p electron",
+    "dist": "npm run build && electron-builder",
+    "pack": "npm run build && electron-builder --dir",
+    "clean": "rimraf dist main src/out",
+    "type-check": "tsc",
+    "lint": "eslint . --ext js,jsx,ts,tsx",
+    "lint:fix": "eslint . --ext js,jsx,ts,tsx --fix"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.21",
+    "@mui/material": "^5.15.21",
+    "@originjs/vite-plugin-require-context": "^1.0.9",
+    "@vitejs/plugin-react": "^1.2.0",
+    "axios": "^1.7.2",
+    "electron-is-dev": "^2.0.0",
+    "electron-log": "^5.1.5",
+    "electron-store": "^8.2.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.24.1",
+    "vite": "^2.8.6",
+    "vite-plugin-electron-renderer": "^0.14.5",
+    "vite-plugin-svgr": "^4.2.0",
+    "zustand": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.22",
+    "@types/react": "^17.0.41",
+    "@types/react-dom": "^17.0.14",
+    "@typescript-eslint/eslint-plugin": "5.16.0",
+    "@typescript-eslint/parser": "5.16.0",
+    "autoprefixer": "^10.4.4",
+    "concurrently": "^7.0.0",
+    "electron": "^17.1.2",
+    "electron-builder": "^22.14.13",
+    "eslint": "8.11.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "postcss": "^8.4.12",
+    "prettier": "2.6.0",
+    "tailwindcss": "^3.0.23",
+    "typescript": "^4.6.2"
+  },
+  "build": {
+    "asar": true,
+    "files": [
+      "main",
+      "src/out"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    }
+  }
+}
