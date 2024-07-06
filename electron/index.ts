@@ -189,21 +189,14 @@ ipcMain.on('createIssue', async (event: IpcMainEvent, issue: any) => {
 
   try {
     const project = await axios.get(`${jiraUrl}/rest/api/3/project/${issue.fields.project.key}`, { headers });
-    const projectId = project.data.id;
-    const issueTypes = await axios.get(`${jiraUrl}/rest/api/3/issuetype`, { headers });
 
     log.info('Project found', project.data);
-    log.info('Issue types found', issueTypes.data);
 
     const attachments = issue.attachments;
     delete issue.attachments;
     const bugIssueType =
-      issueTypes.data.find(
-        (issueType: any) => issueType.name === 'Bug' && issueType?.scope?.project?.id === projectId
-      ) ??
-      issueTypes.data.find(
-        (issueType: any) => issueType.name === 'Task' && issueType?.scope?.project?.id === projectId
-      );
+      project.data.issueTypes.find((issueType: any) => issueType.name === 'Bug') ??
+      project.data.issueTypes.find((issueType: any) => issueType.name === 'Task');
 
     if (!bugIssueType) {
       event.sender.send('issue-created', {
