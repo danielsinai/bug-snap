@@ -10,7 +10,7 @@ xattr -c /Applications/bug-snap.app
 
 ## Features
 
-- **Simple Bug Reporting**: Capture bugs with a quick keyboard shortcut (`Cmd/Ctrl + Alt + J`) and annotate them with title, description, and urgency.
+- **Simple Bug Reporting**: Capture bugs with a quick keyboard shortcut (`Cmd/Ctrl + Alt/Option + J`) and annotate them with title, description, and urgency.
 - **Integrated with Jira**: Seamlessly create Jira issues with captured videos as attachments, ensuring detailed bug reports.
 - **Flexible Capture**: Choose between capturing a desktop window or the entire screen.
 - **Future Integrations**: Currently supports Jira; future updates will include integrations with more tools for enhanced workflow support.
