@@ -1,12 +1,12 @@
 {
   "name": "bug-snap",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "main": "main/index.js",
   "type": "commonjs",
   "icon": "logo.png",
   "author": {
-    "name": "Maximilian Stümpfl"
+    "name": "Daniel Sinai"
   },
   "keywords": [
     "vite",
