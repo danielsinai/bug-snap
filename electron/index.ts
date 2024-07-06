@@ -188,12 +188,31 @@ ipcMain.on('createIssue', async (event: IpcMainEvent, issue: any) => {
   log.info('Sending request to', `${jiraUrl}/rest/api/3/issue`);
 
   try {
+    const project = await axios.get(`${jiraUrl}/rest/api/3/project/${issue.fields.project.key}`, { headers });
+    const projectId = project.data.id;
     const issueTypes = await axios.get(`${jiraUrl}/rest/api/3/issuetype`, { headers });
+
+    log.info('Project found', project.data);
+    log.info('Issue types found', issueTypes.data);
+
     const attachments = issue.attachments;
     delete issue.attachments;
     const bugIssueType =
-      issueTypes.data.find((issueType: any) => issueType.name === 'Bug') ??
-      issueTypes.data.find((issueType: any) => issueType.name === 'Task');
+      issueTypes.data.find(
+        (issueType: any) => issueType.name === 'Bug' && issueType?.scope?.project?.id === projectId
+      ) ??
+      issueTypes.data.find(
+        (issueType: any) => issueType.name === 'Task' && issueType?.scope?.project?.id === projectId
+      );
+
+    if (!bugIssueType) {
+      event.sender.send('issue-created', {
+        data: {},
+        error: 'Bug or Task issue type not found',
+        ok: false
+      });
+      return;
+    }
 
     issue.fields.issuetype = {
       id: bugIssueType.id
@@ -226,7 +245,11 @@ ipcMain.on('createIssue', async (event: IpcMainEvent, issue: any) => {
       });
 
       log.info('Attachment added', attachment);
-      event.sender.send('issue-created', { error: null, data: issueCreateResponse.data, ok: true });
+      event.sender.send('issue-created', {
+        error: null,
+        data: { ...issueCreateResponse.data, link: `${jiraUrl}/browse/${issueCreateResponse.data.key}` },
+        ok: true
+      });
     }
   } catch (error: any) {
     event.sender.send('issue-created', { data: {}, error: error?.response?.data, ok: false });
