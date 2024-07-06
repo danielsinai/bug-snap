@@ -1,6 +1,12 @@
 # BugSnap 🐞
 
 BugSnap is a desktop app designed to streamline bug reporting directly from your screen to Jira. It captures the last 5 seconds of your screen as a video when you encounter a bug, allowing you to create Jira tickets effortlessly.
+## Note for Mac Users
+
+[**Code signing is not supported yet.**](https://github.com/danielsinai/bug-snap/issues/3) To run BugSnap on Mac, make sure to execute the following command:
+```sh
+xattr -c /Applications/bug-snap.app
+```
 
 ## Features
 
