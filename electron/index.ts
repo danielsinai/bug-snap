@@ -2,7 +2,17 @@
 import path, { join } from 'path';
 
 // Packages
-import { BrowserWindow, app, ipcMain, IpcMainEvent, desktopCapturer, globalShortcut, Tray, Menu } from 'electron';
+import {
+  BrowserWindow,
+  app,
+  ipcMain,
+  IpcMainEvent,
+  desktopCapturer,
+  globalShortcut,
+  Tray,
+  Menu,
+  nativeImage
+} from 'electron';
 import isDev from 'electron-is-dev';
 import axios from 'axios';
 import { createReadStream, readdir, stat, statSync, unlink } from 'fs';
@@ -75,8 +85,18 @@ function createWindow() {
     window.hide();
   });
 
+  // if mac hide from dock
+  if (process.platform === 'darwin') {
+    app.dock.hide();
+  }
+
   app.whenReady().then(() => {
-    tray = new Tray(path.join(__dirname, '../src/out/resources/icon.png'));
+    const icon = nativeImage.createFromPath(
+      isDev ? join(__dirname, '../resources/icon.png') : join(__dirname, '../src/out/icon.png')
+    );
+    const trayIcon = icon.resize({ width: 16 });
+    trayIcon.setTemplateImage(true);
+    tray = new Tray(trayIcon);
     const contextMenu = Menu.buildFromTemplate([
       {
         label: 'Open',
@@ -87,8 +107,8 @@ function createWindow() {
       {
         label: 'Quit',
         click: () => {
-          app.quit();
           window.destroy();
+          app.quit();
         }
       }
     ]);
