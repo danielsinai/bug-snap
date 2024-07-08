@@ -4,7 +4,6 @@
   "license": "MIT",
   "main": "main/index.js",
   "type": "commonjs",
-  "icon": "logo.png",
   "author": {
     "name": "Daniel Sinai"
   },
@@ -22,7 +21,7 @@
     "dev": "concurrently \"yarn dev:vite\" \" yarn dev:electron\"",
     "dev:vite": "vite",
     "dev:electron": "npm run build:electron && electron .",
-    "build": "npm run build:vite && npm run build:electron",
+    "build": "npm run build:vite && npm run build:electron && cp -r resources src/out/resources",
     "build:vite": "vite build",
     "build:electron": "tsc -p electron",
     "dist": "npm run build && electron-builder",

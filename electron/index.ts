@@ -21,7 +21,6 @@ function createWindow() {
     show: true,
     resizable: true,
     fullscreenable: true,
-    icon: join(__dirname, '..', 'logo.png'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -30,8 +29,6 @@ function createWindow() {
       webSecurity: false
     }
   });
-
-  console.log(__dirname);
 
   const port = process.env.PORT || 3000;
   const url = isDev ? `http://localhost:${port}` : join(__dirname, '../src/out/index.html');
@@ -79,7 +76,7 @@ function createWindow() {
   });
 
   app.whenReady().then(() => {
-    tray = new Tray(join(__dirname, '..', 'logo.png'));
+    tray = new Tray(path.join(__dirname, '../src/out/resources/icon.png'));
     const contextMenu = Menu.buildFromTemplate([
       {
         label: 'Open',
