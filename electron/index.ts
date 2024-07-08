@@ -2,7 +2,7 @@
 import path, { join } from 'path';
 
 // Packages
-import { BrowserWindow, app, ipcMain, IpcMainEvent, desktopCapturer, globalShortcut } from 'electron';
+import { BrowserWindow, app, ipcMain, IpcMainEvent, desktopCapturer, globalShortcut, Tray, Menu } from 'electron';
 import isDev from 'electron-is-dev';
 import axios from 'axios';
 import { createReadStream, readdir, stat, statSync, unlink } from 'fs';
@@ -32,6 +32,7 @@ function createWindow() {
   });
 
   console.log(__dirname);
+
   const port = process.env.PORT || 3000;
   const url = isDev ? `http://localhost:${port}` : join(__dirname, '../src/out/index.html');
 
@@ -66,7 +67,42 @@ function createWindow() {
       window.webContents.send('report');
     }
   });
+
+  window.on('minimize', (event: any) => {
+    event.preventDefault();
+    window.hide();
+  });
+
+  window.on('close', (event) => {
+    event.preventDefault();
+    window.hide();
+  });
+
+  app.whenReady().then(() => {
+    tray = new Tray(join(__dirname, '..', 'logo.png'));
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: 'Open',
+        click: () => {
+          window.show();
+        }
+      },
+      {
+        label: 'Quit',
+        click: () => {
+          app.quit();
+        }
+      }
+    ]);
+    tray.setToolTip('BugSnap');
+    tray.on('click', () => {
+      window.show();
+    });
+    tray.setContextMenu(contextMenu);
+  });
 }
+
+let tray = null;
 
 // Function to delete files older than 1 day
 const deleteOldFiles = (dirPath: string, maxAgeInMinutes: number) => {
@@ -130,9 +166,9 @@ app.whenReady().then(() => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
-});
+// app.on('window-all-closed', () => {
+//   if (process.platform !== 'darwin') app.quit();
+// });
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
