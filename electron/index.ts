@@ -92,7 +92,7 @@ function createWindow() {
 
   app.whenReady().then(() => {
     const icon = nativeImage.createFromPath(
-      isDev ? join(__dirname, '../resources/icon.png') : join(__dirname, '../src/out/icon.png')
+      isDev ? join(__dirname, '../resources/icon.png') : join(__dirname, '../src/out/resources/icon.png')
     );
     const trayIcon = icon.resize({ width: 16 });
     trayIcon.setTemplateImage(true);
